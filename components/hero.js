@@ -1,3 +1,5 @@
+'use client'
+
 import Animation from "./animation"
 import Link from 'next/link';
 
