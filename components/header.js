@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link';
 import DarkModeToggleButton from './dark-mode-toggle-button';
 import Image from 'next/image';  // Image 컴포넌트 임포트
