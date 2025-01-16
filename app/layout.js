@@ -1,7 +1,7 @@
 import "./globals.css"
 import Header from '../components/header'
 import Footer from "../components/footer"
-import { ThemeProvider } from 'next-themes';
+import ThemeProviderWrapper from '../components/theme-provider-wrapper'
 
 export const metadata = {
   title: "Create Next App",
@@ -9,15 +9,14 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-
   return (
-    <html lang="ko" suppressHydrationWarning >
+    <html lang="ko" suppressHydrationWarning>
       <body>
-        <ThemeProvider attribute='class'>
+        <ThemeProviderWrapper>
           <Header />
           {children}
           <Footer />
-        </ThemeProvider>
+        </ThemeProviderWrapper>
       </body>
     </html>
   );
