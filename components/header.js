@@ -1,5 +1,6 @@
-import Link from 'next/link'
-import DarkModeToggleButton from './dark-mode-toggle-button'
+import Link from 'next/link';
+import DarkModeToggleButton from './dark-mode-toggle-button';
+import Image from 'next/image';  // Image 컴포넌트 임포트
 
 export default function Header() {
     return (
@@ -8,10 +9,14 @@ export default function Header() {
                 <div className="container flex flex-col flex-wrap items-center p-5 mx-auto md:flex-row">
                     <Link href="/">
                         <span className="flex items-center mb-4 font-medium title-font md:mb-0">
-                            <img src="header_logo.png" className="w-12 h-12 rounded-full" />
-                            {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-10 h-10 p-2 text-white bg-indigo-500 rounded-full" viewBox="0 0 24 24">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                            </svg> */}
+                            {/* 기존 img 태그를 Image 컴포넌트로 변경 */}
+                            <Image
+                                src="/header_logo.png"  // 경로 수정
+                                alt="듀듀의 포트폴리오"   // alt 속성 추가
+                                className="w-12 h-12 rounded-full"
+                                width={48}  // 이미지의 너비 지정
+                                height={48} // 이미지의 높이 지정
+                            />
                             <span className="ml-3 text-xl text-gray-900 dark:text-gray-100">듀듀의 포트폴리오</span>
                         </span>
                     </Link>
@@ -24,5 +29,5 @@ export default function Header() {
                 </div>
             </header>
         </>
-    )
+    );
 }

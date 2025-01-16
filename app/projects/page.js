@@ -1,7 +1,9 @@
+
 import { getProjects } from '@/lib/notion';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import LoadingSpinner from '@/components/loading-spinner';
+import Image from 'next/image';  // Image 컴포넌트 추가
 
 // Notion 색상을 Tailwind 색상으로 매핑하는 객체
 const colorMap = {
@@ -25,18 +27,27 @@ function ProjectCard({ project, index }) {
             className="opacity-0 animate-fade-slide-up"
             style={{
                 animationDelay: `${index * 150}ms`,
-                animationFillMode: 'forwards'
+                animationFillMode: 'forwards',
             }}
         >
             <div className="overflow-hidden transition-transform duration-200 border rounded-lg shadow-lg hover:scale-105 group">
+                {/* Image 컴포넌트를 사용하여 이미지 최적화 */}
                 {project.coverImage && (
-                    <img src={project.coverImage} alt={project.title} className="object-cover w-full h-48" />
+                    <Image
+                        src={project.coverImage}
+                        alt={project.title}
+                        className="object-cover w-full h-48"
+                        width={600}  // 이미지의 실제 크기에 맞는 width
+                        height={300} // 이미지의 실제 크기에 맞는 height
+                    />
                 )}
                 <div className="p-4">
                     <Link href={`/projects/${project.slug}`}>
                         <div className="flex items-center gap-2">
                             <h2 className="text-xl font-semibold group-hover:text-blue-500">{project.title}</h2>
-                            <p className="text-sm text-gray-500 transition-opacity opacity-0 group-hover:opacity-100 group-hover:animate-blink">⏎ 상세보기</p>
+                            <p className="text-sm text-gray-500 transition-opacity opacity-0 group-hover:opacity-100 group-hover:animate-blink">
+                                ⏎ 상세보기
+                            </p>
                         </div>
                     </Link>
                     {project.period && (
@@ -73,59 +84,27 @@ function ProjectCard({ project, index }) {
 
 async function ProjectList() {
     const projects = await getProjects();
-    console.log('Projects loaded:', projects?.length); // 로딩 완료 로그
-
     if (!projects || projects.length === 0) {
         return <p>현재 표시할 프로젝트가 없습니다.</p>;
     }
-
     return (
-        <>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {projects.map((project, index) => (
-                    <ProjectCard key={project.id} project={project} index={index} />
-                ))}
-            </div>
-        </>
-    );
-}
-
-export default function Projects() {
-    console.log('Projects page rendering'); // 페이지 렌더링 로그
-
-    return (
-        <div className="container px-4 py-8 mx-auto">
-            <Suspense fallback={
-                <>
-                    <div className="flex items-center gap-4 mb-8">
-                        <h1 className="text-3xl font-bold">프로젝트</h1>
-                        <LoadingSpinner />
-                    </div>
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="border rounded-lg shadow-lg animate-pulse">
-                                <div className="w-full h-48 bg-gray-200 dark:bg-gray-700" />
-                                <div className="p-4">
-                                    <div className="w-3/4 h-6 mb-4 bg-gray-200 rounded dark:bg-gray-700" />
-                                    <div className="w-full h-4 mb-4 bg-gray-200 rounded dark:bg-gray-700" />
-                                    <div className="flex gap-2">
-                                        <div className="w-20 h-6 bg-gray-200 rounded-full dark:bg-gray-700" />
-                                        <div className="w-20 h-6 bg-gray-200 rounded-full dark:bg-gray-700" />
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </>
-            }>
-                <>
-                    <div className="flex items-center gap-4 mb-8">
-                        <h1 className="text-3xl font-bold">프로젝트</h1>
-                    </div>
-                    <ProjectList />
-                </>
-            </Suspense>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {projects.map((project, index) => (
+                <ProjectCard key={project.id} project={project} index={index} />
+            ))}
         </div>
     );
 }
 
+export default function Projects() {
+    return (
+        <div className="container px-4 py-8 mx-auto">
+            <Suspense fallback={<LoadingSpinner />}>
+                <div className="flex items-center gap-4 mb-8">
+                    <h1 className="text-3xl font-bold">프로젝트</h1>
+                </div>
+                <ProjectList />
+            </Suspense>
+        </div>
+    );
+}

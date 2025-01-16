@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from 'next/link';
 import { getProjectBySlug } from "@/lib/notion";
+import Image from 'next/image';  // Image 컴포넌트 추가
 
 // Notion 색상을 Tailwind 색상으로 매핑하는 객체
 const colorMap = {
@@ -18,13 +19,11 @@ const colorMap = {
 
 export default async function ProjectPage({ params }) {
     try {
-        // 디버깅을 위한 로그 추가
-        console.log('[Page] Rendering project with slug:', params.slug);
-
+        // 디버깅 로그 제거
         const project = await getProjectBySlug(params.slug);
 
+        // 프로젝트가 없을 경우 404 반환
         if (!project) {
-            console.log('[Page] Project not found');
             return notFound();
         }
 
@@ -34,21 +33,27 @@ export default async function ProjectPage({ params }) {
                     className="max-w-4xl mx-auto opacity-0 animate-fade-slide-up"
                     style={{
                         animationDelay: '0.1s',
-                        animationFillMode: 'forwards'
+                        animationFillMode: 'forwards',
                     }}
                 >
                     <Link href="/projects" className="inline-block mb-6 text-blue-500 hover:text-blue-600 dark:text-blue-400">
                         ← 프로젝트 목록으로 돌아가기
                     </Link>
 
+                    {/* next/image를 사용하여 이미지 최적화 */}
                     {project.coverImage && (
-                        <img
+                        <Image
                             src={project.coverImage}
                             alt={project.title}
                             className="object-cover w-full h-64 mb-8 rounded-lg"
+                            width={1200} // 적절한 width 설정
+                            height={480} // 적절한 height 설정
+                            priority={true} // 페이지 로딩 시 중요 이미지로 처리
                         />
                     )}
+
                     <h1 className="mb-4 text-4xl font-bold">{project.title}</h1>
+
                     <div className="mb-6">
                         {project.period && (
                             <p className="mb-2 text-gray-600 dark:text-gray-400">
@@ -56,9 +61,11 @@ export default async function ProjectPage({ params }) {
                             </p>
                         )}
                     </div>
+
                     <p className="mb-8 text-lg text-gray-600 dark:text-gray-300">
                         {project.description}
                     </p>
+
                     <div className="mb-8">
                         <h2 className="mb-4 text-2xl font-semibold">사용 기술</h2>
                         <div className="flex flex-wrap gap-2">
@@ -72,6 +79,7 @@ export default async function ProjectPage({ params }) {
                             ))}
                         </div>
                     </div>
+
                     {project.github && (
                         <a
                             href={project.github}
@@ -87,6 +95,6 @@ export default async function ProjectPage({ params }) {
         );
     } catch (error) {
         console.error('[Page] Project detail error:', error);
-        return notFound();
+        return notFound(); // 에러 발생 시 404 페이지 반환
     }
 }
