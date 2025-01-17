@@ -8,32 +8,19 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
-      fontFamily: {
-        'gmarket': ['GmarketSansMedium', 'sans-serif']
-      },
       keyframes: {
-        'fade-slide-up': {
-          '0%': {
-            opacity: '0',
-            transform: 'translateY(20px)'
-          },
-          '100%': {
-            opacity: '1',
-            transform: 'translateY(0)'
-          }
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' }
         },
-        blink: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.3' },
-        }
+        'fade-slide-up': {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' }
+        },
       },
       animation: {
+        'fade-in': 'fade-in 1.5s ease-out', // 지속 시간을 1.5초로 설정하여 부드러운 fade-in 효과
         'fade-slide-up': 'fade-slide-up 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-        blink: 'blink 1s ease-in-out infinite',
       },
     },
   },

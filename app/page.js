@@ -1,5 +1,10 @@
 import Hero from '../components/hero';
 
+export const metadata = {
+  title: "DuDu - Portfolio",
+  description: "Welcome to my portfolio website",
+};
+
 export default function Home() {
   return (
     <section className="flex flex-col min-h-screen text-gray-600 body-font">
